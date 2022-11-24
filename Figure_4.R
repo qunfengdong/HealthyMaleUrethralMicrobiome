@@ -1,6 +1,8 @@
 # Figure 4
 # Author: Yue Xing (yxing4@luc.edu)
 
+# 4a and 4b
+
 	library(ggplot2)
 	library(ggpubr)
 
@@ -66,9 +68,82 @@
 
 	#
 
-	png("E://IUMP//clr_080521//manuscript_v4//UTs.top20.v3.png",res=300,width=3000,height=3000)
+	png("UTs.top20.png",res=300,width=3000,height=3000)
 	ggarrange(p1+ rremove("xlab"), p2, 
 		labels = c("a)", "b)"),
 		nrow = 2)
 
+	dev.off()
+
+# 4c
+
+	library(ggplot2)
+	library(ggpubr)
+	library(vegan)
+	
+	# Calculate alpha diversity
+	nm="hea_heatmap_bacteria_UT1_ra"
+	#nm="hea_heatmap_bacteria_UT2_ra"
+	
+	da <- read.csv(paste0(nm,'.csv'),row.names = 1)
+	cntdata=t(da)
+	richness <- t(estimateR(round(cntdata))[c("S.obs","S.chao1","S.ACE"),])
+	shannon <- diversity(round(cntdata),index = "shannon")
+	simpson <- diversity(round(cntdata),index = "simpson")
+	evenness <- function(data) {diversity(data)/log(specnumber(data))}
+	eveness <- evenness(round(cntdata))
+	stats <- as.data.frame(list(richness,shannon,simpson,eveness))
+	stats[is.na(stats)] <- 0
+	colnames(stats) <- c("Obs","Chao1","ACE","Shannon","Simpson","Pielou")
+	
+	write.csv(stats,paste0(nm,".alpha_diversity.stats.csv"))
+
+	# Plot alpha diversity
+	ut2=read.csv("hea_heatmap_bacteria_UT1_ra.alpha_diversity.stats.csv",row.names=1)
+	ut1=read.csv("hea_heatmap_bacteria_UT2_ra.alpha_diversity.stats.csv",row.names=1)
+
+	ut2=data.frame(t(ut2))
+	ut1=data.frame(t(ut1))
+
+	ut1$M=rowMeans(ut1)
+	ut1$SE=NA
+	nc=(ncol(ut1)-2)
+	for (i in 1:nrow(ut1)) {
+		ut1[i,"SE"]=sd(ut1[i,1:nc])/sqrt(nc)
+	}
+	ut1=ut1[-nrow(ut1),]
+	ut1$Name=rownames(ut1)
+
+	ut2$M=rowMeans(ut2)
+	ut2$SE=NA
+	nc=(ncol(ut2)-2)
+	for (i in 1:nrow(ut2)) {
+		ut2[i,"SE"]=sd(ut2[i,1:nc])/sqrt(nc)
+	}
+	ut2=ut2[-nrow(ut2),]
+	ut2$Name=rownames(ut2)
+
+	ut1$UT="UT1"
+	ut2$UT="UT2"
+
+	ut1=ut1[,c("M","SE","Name","UT")]
+	ut2=ut2[,c("M","SE","Name","UT")]
+
+	uts=rbind(ut1,ut2)
+	uts$Name[c(1,6)]=c("Observation","Observation")
+	uts$Name=factor(uts$Name,levels = c("Observation","ACE","Chao1","Shannon","Simpson"))
+
+	p1 = ggplot(uts, aes(x=Name, y=M, fill=UT, group=UT)) + 
+		geom_bar(stat="identity", color="black", 
+		position=position_dodge()) +
+		geom_errorbar(aes(ymin=M-SE, ymax=M+SE), width=.4,
+		size=1, colour="black", alpha=0.9, position = position_dodge(0.9)) +
+		#coord_flip() +
+		#ggtitle("MF") +
+		labs(x = "Type", y="Alpha diversity") +
+		theme_classic() +
+		scale_fill_manual(values=c("deeppink1","steelblue1")) 
+
+	png("a_diversity.png",width=3000,height=2000,res=300)
+	plot(p1)
 	dev.off()

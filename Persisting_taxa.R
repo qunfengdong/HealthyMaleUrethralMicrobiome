@@ -11,23 +11,23 @@
 	covs=covs[,4:ncol(covs)]
 	covs=covs[rownames(covs)%in%rownames(cnt),]
 
-# 1) (V_60d- and (V_1yr+ or V_ever+)) vs (V_Ever-)
+# 1) V 60d-1yr+ vs V 1yr-
 
-	sexM=read.csv("long1.csv")
+	sexM=read.csv("long3.csv")
 	rownames(sexM)=sexM[,1]
 	sexM=sexM[rownames(sexM)%in%rownames(cnt),]
 
 	dt=merge(cnt,sexM,all.y=TRUE,by="row.names")
 	print(dim(dt))
-	write.csv(dt,paste0("long1.nocov.input.csv"),row.names=FALSE,quote=FALSE)
+	write.csv(dt,paste0("long3.nocov.input.csv"),row.names=FALSE,quote=FALSE)
 		
 	rownames(dt)=dt[,1]
 	dt=dt[,-1]
 	dt2=merge(dt,covs,all.x=TRUE,by="row.names")
 	print(dim(dt2))
-	write.csv(dt2,paste0("long1.wcov.input.csv"),row.names=FALSE,quote=FALSE)
+	write.csv(dt2,paste0("long3.wcov.input.csv"),row.names=FALSE,quote=FALSE)
 
-	# Remove the extra ID column at "DO". Change the sex behavior's column name to format in "V_60d".
+	#Remove the extra ID column at "DO". Change the sex behavior's column name to format in "V_60d".
 
 # 2) (V_1yr- and V_ever+) vs (V_Ever-)
 
@@ -44,24 +44,6 @@
 	dt2=merge(dt,covs,all.x=TRUE,by="row.names")
 	print(dim(dt2))
 	write.csv(dt2,paste0("long2.wcov.input.csv"),row.names=FALSE,quote=FALSE)
-
-	#Remove the extra ID column at "DO". Change the sex behavior's column name to format in "V_60d".
-
-# 3) V 60d-1yr+ vs V 1yr-
-
-	sexM=read.csv("long3.csv")
-	rownames(sexM)=sexM[,1]
-	sexM=sexM[rownames(sexM)%in%rownames(cnt),]
-
-	dt=merge(cnt,sexM,all.y=TRUE,by="row.names")
-	print(dim(dt))
-	write.csv(dt,paste0("long3.nocov.input.csv"),row.names=FALSE,quote=FALSE)
-		
-	rownames(dt)=dt[,1]
-	dt=dt[,-1]
-	dt2=merge(dt,covs,all.x=TRUE,by="row.names")
-	print(dim(dt2))
-	write.csv(dt2,paste0("long3.wcov.input.csv"),row.names=FALSE,quote=FALSE)
 
 	#Remove the extra ID column at "DO". Change the sex behavior's column name to format in "V_60d".
 

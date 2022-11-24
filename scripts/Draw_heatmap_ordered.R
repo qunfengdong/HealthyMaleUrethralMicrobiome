@@ -1,5 +1,6 @@
 # Author: Yue Xing (yxing4@luc.edu)
 
+# This code finds the sum of all taxa for an subj and add it to QC automatically.
 # This script doesn't split bacteria or virus. Just input a table and produce a heatmap from that table.
 # This script is used for relative abundance/counts.
 # Filtering by a threshold still in use.
@@ -287,14 +288,15 @@ preprocess = function(file,qc,cot,in_thres,transf,in_nk,
 
 }
 
-plot_heatmap = function(pref,d1,ta,cdr,cdc,cf,wd,ht,rdw,cdw) {
+plot_heatmap = function(pref,d1,ta,cdr,cf,wd,ht,rdw,cdw,li) {
 	png(paste0(pref,".png"),width=wd,height=ht,res=300)
 	par(mar = c(2, 2, 0.5, 0.5))
 	rownames(d1)=gsub("_"," ",rownames(d1))
 	ht = Heatmap(d1, name = "Abundance",
 		top_annotation = ta,
 	    clustering_distance_rows = cdr,
-	    clustering_distance_columns = cdc,
+	    column_order = order(match(colnames(d1),li)),
+	    #clustering_distance_columns = cdc,
 	    #column_names_rot = 45,
 	    row_names_gp = gpar(fontsize = 10),
 	    #row_names_side = "left",
@@ -312,9 +314,7 @@ plot_heatmap = function(pref,d1,ta,cdr,cdc,cf,wd,ht,rdw,cdw) {
 	ht=draw(ht)
 	print(ht)
 	#draw(ht, heatmap_legend_side = "bottom", annotation_legend_side = "bottom")
-
 	dev.off()
-	print(column_order(ht))
 }
 
 add_bars_b = function(dl0,in_bar_file) {
@@ -352,7 +352,7 @@ enterotype_clus_b = function(m) {
 	data.list$b_dist
 }
 
-plot_ht_all = function(dl,in_cdr,transf_bar,col_f) {
+plot_ht_all = function(dl,in_cdr,transf_bar,col_f,in_li) {
 
 	db2=dl$db2
 	qcb=dl$qcb
@@ -434,43 +434,44 @@ plot_ht_all = function(dl,in_cdr,transf_bar,col_f) {
 	#print(dim(db2))
 	if (col_f==1) {
 		plot_heatmap(paste0(dl$dname,".bar_trans_",transf_bar),
-			db2,column_taxa,in_cdr,enterotype_clus_b,
-			col_fun,6000,5000,30,50)
+			db2,column_taxa,in_cdr,
+			col_fun,6000,5000,30,50,in_li)
 	} else if (col_f==2) {
 		plot_heatmap(paste0(dl$dname,".bar_trans_",transf_bar),
-			db2,column_taxa,in_cdr,enterotype_clus_b,
-			col_fun2,6000,5000,30,50)
+			db2,column_taxa,in_cdr,
+			col_fun2,6000,5000,30,50,in_li)
 	} else if (col_f==3) {
 		plot_heatmap(paste0(dl$dname,".bar_trans_",transf_bar),
-			db2,column_taxa,in_cdr,enterotype_clus_b,
-			col_fun3,6000,5000,30,50)
+			db2,column_taxa,in_cdr,
+			col_fun3,6000,5000,30,50,in_li)
 	} else if (col_f==4) {
 		plot_heatmap(paste0(dl$dname,".bar_trans_",transf_bar),
-			db2,column_taxa,in_cdr,enterotype_clus_b,
-			col_fun4,6000,5000,30,50)
+			db2,column_taxa,in_cdr,
+			col_fun4,6000,5000,30,50,in_li)
 	} else if (col_f==5) {
 		plot_heatmap(paste0(dl$dname,".bar_trans_",transf_bar),
-			db2,column_taxa,in_cdr,enterotype_clus_b,
-			col_fun5,6000,5000,30,50)
+			db2,column_taxa,in_cdr,
+			col_fun5,6000,5000,30,50,in_li)
 	} else if (col_f==6) {
 		plot_heatmap(paste0(dl$dname,".bar_trans_",transf_bar),
-			db2,column_taxa,in_cdr,enterotype_clus_b,
-			col_fun6,6000,5000,30,50)
+			db2,column_taxa,in_cdr,
+			col_fun6,6000,5000,30,50,in_li)
 	}
 }
 
 plot_final = function(file0,thres0,transf0,nk0,transf_bar0,
-	taxa_clust,dir0,sample_clust,re_norm,qc0,cot0,in_col_f,ra0) {
+	taxa_clust,dir0,sample_clust,re_norm,qc0,cot0,
+	in_col_f,ra0,in_li0) {
 	dir.create(dir0)
 	preprocess(file0,
 	qc0,cot0,
 	thres0,transf0,nk0,dir0,sample_clust,re_norm,ra0)
 
 	if (taxa_clust=="phylo") {
-		plot_ht_all(data.list,phylo,transf_bar0,in_col_f)
+		plot_ht_all(data.list,phylo,transf_bar0,in_col_f,in_li0)
 	} else if (taxa_clust=="euclid") {
-		plot_ht_all(data.list,euclid,transf_bar0,in_col_f)
+		plot_ht_all(data.list,euclid,transf_bar0,in_col_f,in_li0)
 	}
-	
+
 	#rm(data.list, pos = ".GlobalEnv")
 }

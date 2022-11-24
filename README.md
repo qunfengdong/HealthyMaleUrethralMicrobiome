@@ -11,13 +11,12 @@ ALR_or_CLR_transformation_and_heatmap.R: ALR and CLR transformations, and heatma
 Draw_Silhouette_index_plot.R: Figure 3c
 PCA_plots.R: Figure 3d and S3c
 Figure_4.R: Figure 4
-Run_SpiecEasi.R: Figure 5a, 5b and Table S6
+SpiecEasi_networks.R, Run_SpiecEasi.R: Figure 5a, 5b and Table S7
 Violin_plot.R: Figure 5c
 Run_humann.sh, Process_humann_output.R: Figure 6, Table S8
 Run_kraken2.sh: Run Kraken2 for the raw sequences, Table S4
 Differential_abundance.R: Table S5
 Genomospecies.md: Table S6, Figure S4
-SpiecEasi_networks.R: Table S7
 OR_for_univariate_analysis_of_UTs.R, UTs_vs_metadata.R: Table S9
 Persisting_taxa.R: Table S13
 Supp_figure_1.R: Figure S1

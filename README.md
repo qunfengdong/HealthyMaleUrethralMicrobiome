@@ -21,5 +21,5 @@ This directory contains scripts for the manuscript "Sexual behavior shapes the a
 - Persisting_taxa.R: Table S13
 - Supp_figure_1.R: Figure S1
 
-- scripts: scripts used in the above files.
+scripts: scripts used in the above files.
 

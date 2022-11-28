@@ -11,9 +11,9 @@ This directory contains scripts for the manuscript "Sexual behavior shapes the a
 - Draw_Silhouette_index_plot.R: Figure 3c
 - PCA_plots.R: Figure 3d and S3c
 - Figure_4.R: Figure 4
-- SpiecEasi_networks.R, Run_SpiecEasi.R: Figure 5a, 5b and Table S7
-- Violin_plot.R: Figure 5c
-- Run_humann.sh, Process_humann_output.R: Figure 6, Table S8
+- SpiecEasi_networks.R, Run_SpiecEasi.R: Figure 6a, 6b and Table S7
+- Violin_plot.R: Figure 5
+- Run_humann.sh, Process_humann_output.R: Figure 6d-f, Table S8
 - Run_kraken2.sh: Run Kraken2 for the raw sequences, Table S4
 - Differential_abundance.R: Table S5
 - Genomospecies.md: Table S6, Figure S4
